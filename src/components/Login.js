@@ -1,6 +1,6 @@
 import Header from "./Header"
 import { bg_img } from "../utils/constants"
-
+import {Link} from "react-router-dom"
 const Login = () => {
   return (
     <div className="relative">
@@ -29,9 +29,12 @@ const Login = () => {
             placeholder="Email address"
             className="flex-1 px-5 py-5 bg-black bg-opacity-60 border border-gray-500 rounded text-white placeholder-gray-400 focus:outline-none focus:border-white"
           />
+          <Link to="/signup">
+          
           <button className="bg-red-600 text-white px-10 py-5 rounded text-xl font-semibold hover:bg-red-700 flex items-center gap-2">
             Get Started <span>›</span>
           </button>
+          </Link>
         </div>
       </div>
     </div>
