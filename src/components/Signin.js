@@ -1,6 +1,8 @@
-import React, { useRef, useState } from 'react'
+import React, { use, useRef, useState } from 'react'
 import { logo_url } from 'utils/constants';
 import { checkValidData } from 'utils/validate';
+import {createUserWithEmailAndPassword,signInWithEmailAndPassword} from "firebase/auth"
+import {auth} from "../utils/firebase"
 
 const Signin = () => {
   const [isSignInForm,setIsSignInForm] = useState(false);
@@ -11,11 +13,42 @@ const Signin = () => {
   const password = useRef(null);
 
   const handleButtonClick = ()=>{
-    console.log(email.current.value);
-    console.log(password.current.value)
-
     const message = checkValidData(email.current.value,password.current.value);
     setErrorMessage(message)
+    if(message) return
+    
+    if(isSignInForm){
+        createUserWithEmailAndPassword(auth,email.current.value,password.current.value)
+        .then((userCredetial)=>{
+          const user = userCredetial.user
+          console.log(user) 
+           
+        })
+        .catch((error)=>{
+          const errorCode = error.code;
+          const errorMessage = error.message
+          setErrorMessage(`${errorCode}: ${errorMessage}`)
+
+        })
+
+    }
+    else{
+       
+        signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+          .then((userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            console.log(user)
+
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(`${errorCode}: ${errorMessage}`)
+            // ..
+          });
+    }
   }
 
   const toggleSigninForm = ()=>{
@@ -80,7 +113,7 @@ const Signin = () => {
           <p className="text-sm text-gray-400 mt-4">{isSignInForm? "Alreay a User?":"New to Netflix?"}
             
             <button onClick={toggleSigninForm} className="text-white font-semibold hover:underline ml-1">
-              {isSignInForm? "Sign In ":"Sign Up"}
+              {!isSignInForm? "Sign up":"Sign in"}
             </button>
           </p>
         </div>
