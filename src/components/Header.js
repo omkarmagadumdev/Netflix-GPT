@@ -1,4 +1,5 @@
-import { logo_url, profile_img } from "../utils/constants";
+import { logo_url } from "../utils/constants";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -9,15 +10,18 @@ const Header = () => {
         alt="Netflix Logo"
       />
       <div className="ml-auto flex items-center gap-3">
+        <Link to="/signin">
+        
         <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 cursor-pointer">
           Sign In
         </button>
-        <img
+        </Link>
+        {/* <img
           src={profile_img}
           alt="User profile"
           className="w-10 h-10 rounded object-cover"
           referrerPolicy="no-referrer"
-        />
+        /> */}
       </div>
     </div>
   );
