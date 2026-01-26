@@ -1,7 +1,8 @@
 import { logo_url } from "../utils/constants";
-import { Link } from "react-router-dom";
+
 
 const Header = () => {
+
   return (
     <div className="absolute inset-x-0 top-0 z-30 w-full px-8 py-2 bg-gradient-to-b from-black flex justify-between items-center pointer-events-auto">
       <img
@@ -9,20 +10,7 @@ const Header = () => {
         src={logo_url}
         alt="Netflix Logo"
       />
-      <div className="ml-auto flex items-center gap-3">
-        <Link to="/signin">
-        
-        <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 cursor-pointer">
-          Sign In
-        </button>
-        </Link>
-        {/* <img
-          src={profile_img}
-          alt="User profile"
-          className="w-10 h-10 rounded object-cover"
-          referrerPolicy="no-referrer"
-        /> */}
-      </div>
+      
     </div>
   );
 };

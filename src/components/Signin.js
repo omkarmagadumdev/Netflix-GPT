@@ -1,7 +1,7 @@
-import React, { use, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { logo_url } from 'utils/constants';
 import { checkValidData } from 'utils/validate';
-import {createUserWithEmailAndPassword,signInWithEmailAndPassword} from "firebase/auth"
+import {createUserWithEmailAndPassword,signInWithEmailAndPassword, updateProfile} from "firebase/auth"
 import {auth} from "../utils/firebase"
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ const Signin = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const navigate = useNavigate()
 
-
+  const name = useRef(null)
   const email = useRef(null);
   const password = useRef(null);
 
@@ -25,34 +25,38 @@ const Signin = () => {
         createUserWithEmailAndPassword(auth,email.current.value,password.current.value)
         .then((userCredetial)=>{
           const user = userCredetial.user
-          console.log(user) 
-          navigate("/browse")
-           
+          updateProfile(user, {
+            displayName: name.current?.value || "",
+            photoURL: "https://example.com/jane-q-user/profile.jpg",
+          })
+            .then(() => {
+              navigate("/browse");
+            })
+            .catch((error) => {
+              setErrorMessage(error.message)
+            })
         })
         .catch((error)=>{
           const errorCode = error.code;
-          const errorMessage = error.message
-          setErrorMessage(`${errorCode}: ${errorMessage}`)
-
+          const errorMessage = error.message;
+          if(errorCode === 'auth/email-already-in-use') {
+            setErrorMessage("This email is already registered. Please sign in instead.");
+          } else {
+            setErrorMessage(`${errorCode}: ${errorMessage}`);
+          }
         })
 
     }
     else{
        
         signInWithEmailAndPassword(auth, email.current.value, password.current.value)
-          .then((userCredential) => {
-            // Signed up
-            const user = userCredential.user;
-            console.log(user)
-            navigate("/browse")
-
-            // ...
+          .then(() => {
+            navigate("/browse");
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             setErrorMessage(`${errorCode}: ${errorMessage}`)
-            // ..
           });
     }
   }
@@ -80,11 +84,14 @@ const Signin = () => {
           <p className="text-gray-400 text-lg mb-8">Or get started with a new account.</p>
 
           <form className="flex flex-col gap-4 mb-8" onSubmit={(e)=>e.preventDefault()}>
-            {isSignInForm && <input
-              type="name"
-              placeholder="Name"
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-600 focus:bg-gray-700 transition"
-            />}
+            {isSignInForm && (
+              <input
+                ref={name}
+                type="text"
+                placeholder="Name"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-600 focus:bg-gray-700 transition"
+              />
+            )}
             <input
               ref={email}
               type="email"
