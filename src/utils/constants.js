@@ -7,3 +7,10 @@ export const profile_img_red = "https://wallpapers.com/images/hd/netflix-profile
 export const profile_img_green = "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png?20201013161117"
 export const profile_img_yellow = "https://i.pinimg.com/736x/1b/a2/e6/1ba2e6d1d4874546c70c91f1024e17fb.jpg"
 
+// Get your API key from https://www.themoviedb.org/settings/api
+export const TMDB_API_KEY = 'ca7a2a25ad167537cd443a05e5f6724d';
+
+export const  API_options =  {
+  method: 'GET',
+  headers: {accept: 'application/json'}
+};

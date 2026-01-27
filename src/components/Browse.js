@@ -1,12 +1,16 @@
-import React from 'react'
+
 import Header from './Header'
-import {profile_img_green, profile_img_red, profile_img_yellow} from '../utils/constants'
+import {  profile_img_green, profile_img_red, profile_img_yellow} from '../utils/constants'
 import { getAuth, signOut } from "firebase/auth";
 import { useSelector } from 'react-redux';
+import useNowPlayingMovies from 'customHooks/useNowPlayingMovies';
+import MainContainer from './MainContainer';
+import SecondaryContainer from './SecondaryContainer';
+
 
 const Browse = () => {
   const user = useSelector((store) => store.user);
-  
+  useNowPlayingMovies()
   const handleSignOut = ()=>{
     const auth = getAuth();
     signOut(auth)
@@ -19,7 +23,7 @@ const Browse = () => {
 
   }
   return (
-    <div className="relative w-full min-h-screen bg-black">
+    <div className="relative w-full h-screen overflow-y-auto bg-black">
       <Header />
       <div className="absolute top-6 right-10 z-40">
         <div className="relative group">
@@ -88,11 +92,8 @@ const Browse = () => {
           </div>
         </div>
       </div>
-      <div className="relative z-10 pt-20 px-8 text-white">
-        {/* Main content goes here */}
-
-        
-      </div>
+      <MainContainer/>
+      <SecondaryContainer/>
     </div>
   )
 }
