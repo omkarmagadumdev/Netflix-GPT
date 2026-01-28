@@ -1,16 +1,24 @@
-import React from 'react'
+import useMovieTrailer from "customHooks/useMovieTrailer"
+import { useSelector } from "react-redux"
 
-const VideoBackground = () => {
+
+const VideoBackground = ({movieId}) => {
+  const trailerVideo = useSelector(store=>store.movies?.trailerVideo)
+  useMovieTrailer(movieId)
+
   return (
     <div className="w-full aspect-video">
-      <iframe 
-        className="w-full h-full"
-        src="https://www.youtube.com/embed/yeR5bcbRPak?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&loop=1&playlist=yeR5bcbRPak" 
-        title="YouTube video player" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      ></iframe>
+      {trailerVideo && (
+        <iframe 
+          className="w-full h-full"
+          src={`https://www.youtube.com/embed/${trailerVideo.key}?autoplay=1&mute=1&controls=0`}
+          title="YouTube video player"  
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerPolicy="strict-origin-when-cross-origin"
+        ></iframe>
+      )}
     </div>
   )
 }
 
-export default VideoBackground
+export default VideoBackground  

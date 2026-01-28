@@ -10,7 +10,7 @@ const useNowPlayingMovies = () => {
         const url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${TMDB_API_KEY}`;
         const data = await fetch(url, API_options);
         const json = await data.json();
-        console.log(json.results);
+        
         dispatch(addNowPlayingMovies(json.results))
   
     }
