@@ -13,9 +13,9 @@ const MainContainer = () => {
 
 
   return (
-    <div className="relative w-full">
-        <VideoTitle title={original_title} overview={overview}/>
+    <div className="relative w-full h-screen">
         <VideoBackground movieId={id}/>
+        <VideoTitle title={original_title} overview={overview}/>
     </div>
   )
 }

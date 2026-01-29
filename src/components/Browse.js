@@ -3,14 +3,20 @@ import Header from './Header'
 import {  profile_img_green, profile_img_red, profile_img_yellow} from '../utils/constants'
 import { getAuth, signOut } from "firebase/auth";
 import { useSelector } from 'react-redux';
-import useNowPlayingMovies from 'customHooks/useNowPlayingMovies';
+import useNowPlayingMovies from '../hooks/useNowPlayingMovies';
 import MainContainer from './MainContainer';
 import SecondaryContainer from './SecondaryContainer';
+import usePopular from 'hooks/usePopular';
+import useTopRated from 'hooks/useTopRated';
+import useUpcomingMovies from 'hooks/useUpcomingMovies';
 
 
 const Browse = () => {
   const user = useSelector((store) => store.user);
   useNowPlayingMovies()
+  usePopular()
+  useTopRated()
+  useUpcomingMovies()
   const handleSignOut = ()=>{
     const auth = getAuth();
     signOut(auth)
