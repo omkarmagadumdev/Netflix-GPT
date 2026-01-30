@@ -18,23 +18,27 @@ const MovieLists = ({title, movies}) => {
     }
     
   return (
-    <div className="px-6 py-8 relative">
+    <div className="px-8 py-6 relative">
         <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-6 pl-2">{title}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-6 pl-2 tracking-tight">{title}</h1>
             <div className="relative group">
-                <button onClick={() => scroll('left')} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-80 text-white p-2 z-10 rounded-full hidden group-hover:block transition-all">
+                <button 
+                  onClick={() => scroll('left')} 
+                  className="absolute -left-4 top-1/2 transform -translate-y-1/2 bg-black/70 hover:bg-black/90 text-white p-3 z-20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-xl backdrop-blur-sm">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
                 {movies && (
-                <div ref={scrollRef} className="flex gap-5 overflow-x-scroll scrollbar-hide pb-2">
+                <div ref={scrollRef} className="flex gap-4 overflow-x-scroll scrollbar-hide pb-4 scroll-smooth">
                     {movies?.map(movies=> <MovieCards key={movies.id} posterPath={movies.poster_path}/>)}
                 </div>
                 )}
-                <button onClick={() => scroll('right')} className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-80 text-white p-2 z-10 rounded-full hidden group-hover:block transition-all">
+                <button 
+                  onClick={() => scroll('right')} 
+                  className="absolute -right-4 top-1/2 transform -translate-y-1/2 bg-black/70 hover:bg-black/90 text-white p-3 z-20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-xl backdrop-blur-sm">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                     </svg>
                 </button>
             </div>
