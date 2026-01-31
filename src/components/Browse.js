@@ -6,11 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import useNowPlayingMovies from '../hooks/useNowPlayingMovies';
 import MainContainer from './MainContainer';
 import SecondaryContainer from './SecondaryContainer';
-import usePopular from 'hooks/usePopular';
-import useTopRated from 'hooks/useTopRated';
-import useUpcomingMovies from 'hooks/useUpcomingMovies';
+import usePopular from '../hooks/usePopular';
+import useTopRated from '../hooks/useTopRated';
+import useUpcomingMovies from '../hooks/useUpcomingMovies';
 import GPTSearch from './GPTSearch';
-import { toggleGptSearchView } from 'utils/gptSlice';
+import { toggleGptSearchView } from '../utils/gptSlice';
 import {  useNavigate } from 'react-router-dom';
 
 
@@ -116,7 +116,7 @@ const Browse = () => {
             
             {/* Sign Out */}
             <div className="border-t border-gray-700">
-              <div onClick = {handleSignOut} className="px-4 py-3 text-white text-sm text-center hover:bg-gray-800 cursor-pointer">
+              <div onClick={handleSignOut} className="px-4 py-3 text-white text-sm text-center hover:bg-gray-800 cursor-pointer">
                 Sign out of Netflix
               </div>
             </div>
@@ -124,10 +124,11 @@ const Browse = () => {
         </div>
       </div>
       {showGptSearch ? 
-      <GPTSearch/> :<>
-      (<MainContainer/>
-      <SecondaryContainer/>)
-      </>  } 
+      <GPTSearch/> : <>
+      <MainContainer/>
+      <SecondaryContainer/>
+      </>
+      } 
       
     </div>
   )
