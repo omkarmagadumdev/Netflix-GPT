@@ -1,4 +1,3 @@
-
 import Header from './Header'
 import {  profile_img_green, profile_img_red, profile_img_yellow} from '../utils/constants'
 import { getAuth, signOut } from "firebase/auth";
@@ -45,8 +44,8 @@ const Browse = () => {
   return (
     <div className="relative w-full h-screen overflow-y-auto bg-black">
       <Header/>
-      {/* GPT Search Button - Premium Netflix Style */}
-      <div className="absolute top-5 right-36 z-40">
+      {/* GPT Search Button - adjusted position */}
+      <div className="absolute top-5 right-48 z-40">
         <button onClick={handleGptSearchClick} className="group flex items-center gap-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-sm font-semibold py-2.5 px-5 rounded-md shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 border border-red-500/20">
           <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -55,7 +54,7 @@ const Browse = () => {
         </button>
       </div>
 
-      {/* Profile Dropdown */}
+      {/* Profile Dropdown - adjusted position */}
       <div className="absolute top-6 right-8 z-40">
         <div className="relative group">
           <div onClick={handleProfileClick} className="w-10 h-10 rounded-md cursor-pointer overflow-hidden transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-red-500/30 border-2 border-transparent hover:border-red-500/50">
