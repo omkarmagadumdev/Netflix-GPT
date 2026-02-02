@@ -14,14 +14,11 @@ import useTopRated from "../hooks/useTopRated";
 import useUpcomingMovies from "../hooks/useUpcomingMovies";
 import GPTSearch from "./GPTSearch";
 import { toggleGptSearchView } from "../utils/gptSlice";
-import { useNavigate } from "react-router-dom";
-import showGptSearch from "../utils/gptSlice";
 
 const Browse = () => {
   const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
-  const navigate = useNavigate();
   useNowPlayingMovies();
   usePopular();
   useTopRated();
