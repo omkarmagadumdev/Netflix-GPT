@@ -18,4 +18,6 @@ export const  API_options =  {
   }
 };
 
-export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500/"
+export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500/";
+
+export const OPENAI_KEY = "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";

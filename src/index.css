@@ -10,3 +10,27 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Netflix-style dropdown */
+#lang-select {
+  color: white;
+}
+
+#lang-select option {
+  background-color: #18181b !important;
+  color: white !important;
+  padding: 12px 16px !important;
+  font-weight: 500 !important;
+  border: none !important;
+}
+
+#lang-select option:hover,
+#lang-select option:focus,
+#lang-select option:checked {
+  background-color: #27272a !important;
+  background: linear-gradient(to right, #27272a, #3f3f46) !important;
+}
+
+#lang-select option:checked {
+  background-color: #3f3f46 !important;
+}

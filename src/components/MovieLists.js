@@ -3,7 +3,7 @@ import MovieCards from './MovieCards'
 
 const MovieLists = ({title, movies}) => {
 
-    console.log(movies);
+    
     const scrollRef = useRef(null);
 
     const scroll = (direction) => {
