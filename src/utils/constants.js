@@ -8,16 +8,16 @@ export const profile_img_green = "https://upload.wikimedia.org/wikipedia/commons
 export const profile_img_yellow = "https://i.pinimg.com/736x/1b/a2/e6/1ba2e6d1d4874546c70c91f1024e17fb.jpg"
 
 // Get your API key from https://www.themoviedb.org/settings/api
-export const TMDB_API_KEY = 'ca7a2a25ad167537cd443a05e5f6724d';
+export const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 export const  API_options =  {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjYTdhMmEyNWFkMTY3NTM3Y2Q0NDNhMDVlNWY2NzI0ZCIsIm5iZiI6MTc1NDY2NTU2OC4yNzcsInN1YiI6IjY4OTYxMjYwZmNjZDJlYzhhZmEzMzIxOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.cs_smZtATDgxrrX_5qAvJ4dOxYas-uhg7p61euTkIC0'
+    Authorization: `Bearer ${process.env.REACT_APP_TMDB_TOKEN}`
   }
 };
 
 export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500/";
 
-export const OPENAI_KEY = "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";
+export const OPENAI_KEY = process.env.REACT_APP_OPENAI_KEY;
