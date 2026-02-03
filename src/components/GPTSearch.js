@@ -2,12 +2,12 @@ import React from "react";
 import GptSearchBar from "./GptSearchBar";
 import GptMovieSuggestions from "./GptMovieSuggestions";
 import { SUPPORTED_LANGUAGES } from "utils/languageConstants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changeLanguage } from "utils/configSlice";
-import showGptSearch from "../utils/gptSlice";
 
 const GPTSearch = () => {
   const dispatch = useDispatch();
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
   const handleLanguageChange = (e) => {
     dispatch(changeLanguage(e.target.value));
   };

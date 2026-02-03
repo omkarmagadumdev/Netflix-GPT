@@ -1,41 +1,45 @@
-import { useEffect, useState } from "react"
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom"
-import Browse from "./Browse"
-import Login from "./Login"
-import Signin from "./Signin"
-import Signup from "./Signup"
-import { useDispatch, useSelector } from "react-redux"
-import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "utils/firebase"
-import { addUser, removeUser } from "utils/userSlice"
+import { useEffect, useState } from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
+import Browse from "./Browse";
+import Login from "./Login";
+import Signin from "./Signin";
+import Signup from "./Signup";
+import { useDispatch, useSelector } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "utils/firebase";
+import { addUser, removeUser } from "utils/userSlice";
 
 const Body = () => {
-  const dispatch = useDispatch()
-  const user = useSelector((store) => store.user)
-  const [authReady, setAuthReady] = useState(false)
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
+  const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
       if (fbUser) {
-        const { uid, email, displayName } = fbUser
-        dispatch(addUser({ uid, email, displayName }))
+        const { uid, email, displayName } = fbUser;
+        dispatch(addUser({ uid, email, displayName }));
       } else {
-        dispatch(removeUser())
+        dispatch(removeUser());
       }
-      setAuthReady(true)
-    })
-    return () => unsubscribe()
-  }, [dispatch])
+      setAuthReady(true);
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
 
   const RequireAuth = ({ children }) => {
-    if (!user?.uid) return <Navigate to="/" replace />
-    return children
-  }
+    if (!user?.uid) return <Navigate to="/" replace />;
+    return children;
+  };
 
   const RedirectIfAuth = ({ children }) => {
-    if (user?.uid) return <Navigate to="/browse" replace />
-    return children
-  }
+    if (user?.uid) return <Navigate to="/browse" replace />;
+    return children;
+  };
 
   const appRouter = createBrowserRouter([
     {
@@ -44,7 +48,7 @@ const Body = () => {
         <RedirectIfAuth>
           <Login />
         </RedirectIfAuth>
-      )
+      ),
     },
     {
       path: "/browse",
@@ -52,7 +56,7 @@ const Body = () => {
         <RequireAuth>
           <Browse />
         </RequireAuth>
-      )
+      ),
     },
     {
       path: "/signin",
@@ -60,7 +64,7 @@ const Body = () => {
         <RedirectIfAuth>
           <Signin />
         </RedirectIfAuth>
-      )
+      ),
     },
     {
       path: "/signup",
@@ -68,13 +72,19 @@ const Body = () => {
         <RedirectIfAuth>
           <Signup />
         </RedirectIfAuth>
-      )
-    }
-  ])
+      ),
+    },
+  ]);
 
-  if (!authReady) return null
+  if (!authReady) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-black">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
 
-  return <RouterProvider router={appRouter} />
-}
+  return <RouterProvider router={appRouter} />;
+};
 
-export default Body
+export default Body;

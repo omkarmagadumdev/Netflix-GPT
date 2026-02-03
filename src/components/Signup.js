@@ -1,16 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logo_url } from "../utils/constants";
+import { logo_url } from "utils/constants";
 
 const Signup = () => {
   return (
     <div className="min-h-screen bg-white text-black flex flex-col">
       <header className="flex items-center justify-between px-6 py-4">
-        <img
-          src={logo_url}
-          alt="Netflix logo"
-          className="h-10 sm:h-12"
-        />
+        <img src={logo_url} alt="Netflix logo" className="h-10 sm:h-12" />
         <Link
           to="/signin"
           className="text-sm font-semibold text-gray-900 hover:underline"
@@ -48,7 +44,9 @@ const Signup = () => {
               Send sign-in code
             </button>
 
-            <div className="text-center text-gray-500 text-sm font-medium">OR</div>
+            <div className="text-center text-gray-500 text-sm font-medium">
+              OR
+            </div>
 
             <button
               type="button"
@@ -74,8 +72,11 @@ const Signup = () => {
             </p>
 
             <p className="text-xs text-gray-500 leading-relaxed mt-4">
-              This page is protected by Google reCAPTCHA to ensure you're not a bot.
-              <span className="text-blue-600 hover:underline ml-1 cursor-pointer">Learn more</span>
+              This page is protected by Google reCAPTCHA to ensure you're not a
+              bot.
+              <span className="text-blue-600 hover:underline ml-1 cursor-pointer">
+                Learn more
+              </span>
             </p>
           </form>
         </div>

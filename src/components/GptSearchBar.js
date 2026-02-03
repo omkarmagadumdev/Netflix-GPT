@@ -1,12 +1,73 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { lang } from "utils/languageConstants";
+import { requestGptCompletion } from "utils/openai";
 
 const GptSearchBar = () => {
   const langKey = useSelector((store) => store.config.lang);
-  const search = useRef(null);
-  const handleSubmit = () => {
-    console.log(search.current.value);
+  const searchText = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [resultText, setResultText] = useState("");
+  const handleGptSearchClick = async () => {
+    if (isLoading) {
+      return;
+    }
+
+    try {
+      setErrorMessage("");
+      setResultText("");
+      if (!sessionStorage.getItem("OPENAI_API_KEY")) {
+        const userKey = window.prompt(
+          "Enter your OpenAI API key (stored only in this browser session)."
+        );
+        if (userKey) {
+          sessionStorage.setItem("OPENAI_API_KEY", userKey.trim());
+        }
+      }
+
+      if (!sessionStorage.getItem("OPENAI_API_KEY")) {
+        setErrorMessage("API key is required to search.");
+        return;
+      }
+
+      const query = searchText.current?.value?.trim();
+
+      if (!query) {
+        setErrorMessage("Please enter a search query.");
+        return;
+      }
+
+      setIsLoading(true);
+
+      const result = await requestGptCompletion({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "developer",
+            content:
+              "You are a movie recommendation assistant. Based on the user's query, return 5 movie recommendations as a comma-separated list of titles only. No extra text.",
+          },
+          { role: "user", content: query },
+        ],
+      });
+
+      const output =
+        result?.output_text ||
+        result?.output?.[0]?.content?.[0]?.text ||
+        "No response";
+      console.log("GPT raw response:", result);
+      console.log("GPT output:", output);
+      setResultText(output);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(
+        error?.message ||
+          "Request failed. If you see 'Failed to fetch', the browser may be blocking the request."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -24,18 +85,29 @@ const GptSearchBar = () => {
         <div className="w-full max-w-2xl">
           <div className="flex gap-3">
             <input
-              ref={search}
+              ref={searchText}
               type="text"
               placeholder={lang[langKey].GptSearchLang}
               className="w-full px-4 py-3 md:py-4 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 text-sm md:text-base"
             />
             <button
-              onClick={handleSubmit}
-              className="px-6 md:px-8 py-3 md:py-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors duration-200 text-sm md:text-base whitespace-nowrap"
+              onClick={handleGptSearchClick}
+              disabled={isLoading}
+              className={`px-6 md:px-8 py-3 md:py-4 text-white font-semibold rounded-lg transition-colors duration-200 text-sm md:text-base whitespace-nowrap ${
+                isLoading
+                  ? "bg-red-800 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700"
+              }`}
             >
-              {lang[langKey].search}
+              {isLoading ? "Searching..." : lang[langKey].search}
             </button>
           </div>
+          {errorMessage ? (
+            <p className="mt-3 text-sm text-red-400">{errorMessage}</p>
+          ) : null}
+          {resultText ? (
+            <p className="mt-3 text-sm text-green-400">{resultText}</p>
+          ) : null}
         </div>
       </div>
 

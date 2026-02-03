@@ -13,7 +13,7 @@ import usePopular from "../hooks/usePopular";
 import useTopRated from "../hooks/useTopRated";
 import useUpcomingMovies from "../hooks/useUpcomingMovies";
 import GPTSearch from "./GPTSearch";
-import { toggleGptSearchView } from "../utils/gptSlice";
+import { toggleGptSearchView } from "utils/gptSlice";
 
 const Browse = () => {
   const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
