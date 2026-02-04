@@ -19,16 +19,11 @@ const GptSearchBar = () => {
       setResultText("");
       if (!sessionStorage.getItem("OPENAI_API_KEY")) {
         const userKey = window.prompt(
-          "Enter your OpenAI API key (stored only in this browser session)."
+          "Enter your OpenAI API key to use OpenAI (stored only in this browser session). Leave blank to use a free local model via Ollama."
         );
         if (userKey) {
           sessionStorage.setItem("OPENAI_API_KEY", userKey.trim());
         }
-      }
-
-      if (!sessionStorage.getItem("OPENAI_API_KEY")) {
-        setErrorMessage("API key is required to search.");
-        return;
       }
 
       const query = searchText.current?.value?.trim();
@@ -104,7 +99,7 @@ const GptSearchBar = () => {
           </div>
           {errorMessage ? (
             <p className="mt-3 text-sm text-red-400">{errorMessage}</p>
-          ) : null}
+          ) : null} 
           {resultText ? (
             <p className="mt-3 text-sm text-green-400">{resultText}</p>
           ) : null}

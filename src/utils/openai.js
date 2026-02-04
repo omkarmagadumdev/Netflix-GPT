@@ -7,10 +7,56 @@ export const requestGptCompletion = async ({ messages, model }) => {
   const apiKey = getClientApiKey();
 
   if (!apiKey) {
-    throw new Error(
-      "Missing API key. Set OPENAI_API_KEY in sessionStorage or localStorage."
-    );
+    try {
+      const ollamaResponse = await fetch("http://localhost:11434/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: model || "llama3.2",
+          messages: (messages || []).map((message) => ({
+            role: message.role === "developer" ? "system" : message.role,
+            content: message.content,
+          })),
+          stream: false,
+        }),
+      });
+
+      if (!ollamaResponse.ok) {
+        const details = await ollamaResponse.text();
+        throw new Error(details || "Local model request failed.");
+      }
+
+      const data = await ollamaResponse.json();
+      return { output_text: data?.message?.content || "" };
+    } catch (error) {
+      throw new Error(
+        "No OpenAI API key found and local Ollama is not running. Start Ollama (http://localhost:11434) or add credits to your OpenAI account."
+      );
+    }
   }
+
+  const requestLocalOllama = async () => {
+    const ollamaResponse = await fetch("http://localhost:11434/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: model || "llama3.2",
+        messages: (messages || []).map((message) => ({
+          role: message.role === "developer" ? "system" : message.role,
+          content: message.content,
+        })),
+        stream: false,
+      }),
+    });
+
+    if (!ollamaResponse.ok) {
+      const details = await ollamaResponse.text();
+      throw new Error(details || "Local model request failed.");
+    }
+
+    const data = await ollamaResponse.json();
+    return { output_text: data?.message?.content || "" };
+  };
 
   const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
@@ -26,7 +72,13 @@ export const requestGptCompletion = async ({ messages, model }) => {
 
   if (!response.ok) {
     if (response.status === 429) {
-      throw new Error("Rate limit exceeded. Please wait a bit and try again.");
+      try {
+        return await requestLocalOllama();
+      } catch (error) {
+        throw new Error(
+          "Rate limit exceeded on OpenAI and local Ollama is not running. Start Ollama (http://localhost:11434) or add credits to your OpenAI account."
+        );
+      }
     }
     let errorMessage = "Request failed";
     try {
