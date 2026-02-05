@@ -68,30 +68,36 @@ const GptSearchBar = () => {
   return (
     <>
       {/* Search Header Section */}
-      <div className="flex flex-col justify-center items-center py-12 md:py-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 text-center">
-          {lang[langKey].GptSearchHeading}
-        </h1>
-        <p className="text-gray-400 text-lg md:text-xl text-center max-w-2xl mb-8">
+      <div className="relative flex flex-col justify-center items-center py-12 md:py-16">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(255,0,60,0.18),rgba(0,0,0,0))]" />
+        <div className="text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-gray-200">
+            AI Curated Picks
+          </span>
+          <h1 className="mt-4 text-4xl md:text-5xl font-bold text-white">
+            {lang[langKey].GptSearchHeading}
+          </h1>
+        </div>
+        <p className="text-gray-400 text-base md:text-lg text-center max-w-2xl mt-3 mb-8">
           {lang[langKey].GptSearchh2}
         </p>
 
         {/* Search Bar */}
         <div className="w-full max-w-2xl">
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               ref={searchText}
               type="text"
               placeholder={lang[langKey].GptSearchLang}
-              className="w-full px-4 py-3 md:py-4 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 text-sm md:text-base"
+              className="w-full px-4 py-3 md:py-4 rounded-xl bg-gray-900/70 text-white placeholder-gray-500 border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-500/80 focus:border-red-500/80 text-sm md:text-base shadow-lg shadow-black/30"
             />
             <button
               onClick={handleGptSearchClick}
               disabled={isLoading}
-              className={`px-6 md:px-8 py-3 md:py-4 text-white font-semibold rounded-lg transition-colors duration-200 text-sm md:text-base whitespace-nowrap ${
+              className={`px-6 md:px-8 py-3 md:py-4 text-white font-semibold rounded-xl transition-all duration-200 text-sm md:text-base whitespace-nowrap shadow-lg shadow-black/30 ${
                 isLoading
                   ? "bg-red-800 cursor-not-allowed"
-                  : "bg-red-600 hover:bg-red-700"
+                  : "bg-gradient-to-b from-red-500 to-red-700 hover:from-red-400 hover:to-red-600"
               }`}
             >
               {isLoading ? "Searching..." : lang[langKey].search}
@@ -99,16 +105,18 @@ const GptSearchBar = () => {
           </div>
           {errorMessage ? (
             <p className="mt-3 text-sm text-red-400">{errorMessage}</p>
-          ) : null} 
+          ) : null}
           {resultText ? (
-            <p className="mt-3 text-sm text-green-400">{resultText}</p>
+            <div className="mt-4 rounded-xl border border-white/10 bg-gray-900/70 p-4 text-sm text-green-300">
+              {resultText}
+            </div>
           ) : null}
         </div>
       </div>
 
       {/* Filters Section */}
       <div className="max-w-7xl mx-auto mt-10 mb-10">
-        <div className="bg-gray-900 rounded-lg p-5 md:p-6">
+        <div className="bg-gray-900/80 border border-white/10 rounded-2xl p-5 md:p-6 shadow-xl shadow-black/30">
           <h2 className="text-white text-lg font-semibold mb-4">
             {lang[langKey].filters}
           </h2>
@@ -118,7 +126,7 @@ const GptSearchBar = () => {
               <label className="block text-gray-400 text-sm mb-2">
                 {lang[langKey].genre}
               </label>
-              <select className="w-full px-3 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 text-sm">
+              <select className="w-full px-3 py-2 bg-gray-800/80 text-white rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-500/80 text-sm">
                 <option>{lang[langKey].allGenres}</option>
                 <option>{lang[langKey].action}</option>
                 <option>{lang[langKey].comedy}</option>
@@ -134,7 +142,7 @@ const GptSearchBar = () => {
               <label className="block text-gray-400 text-sm mb-2">
                 {lang[langKey].year}
               </label>
-              <select className="w-full px-3 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 text-sm">
+              <select className="w-full px-3 py-2 bg-gray-800/80 text-white rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-500/80 text-sm">
                 <option>{lang[langKey].allYears}</option>
                 <option>2024</option>
                 <option>2023</option>
@@ -148,7 +156,7 @@ const GptSearchBar = () => {
               <label className="block text-gray-400 text-sm mb-2">
                 {lang[langKey].rating}
               </label>
-              <select className="w-full px-3 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 text-sm">
+              <select className="w-full px-3 py-2 bg-gray-800/80 text-white rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-500/80 text-sm">
                 <option>{lang[langKey].allRatings}</option>
                 <option>8.0+</option>
                 <option>7.0+</option>
@@ -161,7 +169,7 @@ const GptSearchBar = () => {
               <label className="block text-gray-400 text-sm mb-2">
                 {lang[langKey].sortBy}
               </label>
-              <select className="w-full px-3 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 text-sm">
+              <select className="w-full px-3 py-2 bg-gray-800/80 text-white rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-500/80 text-sm">
                 <option>{lang[langKey].relevance}</option>
                 <option>{lang[langKey].popularity}</option>
                 <option>{lang[langKey].rating}</option>
