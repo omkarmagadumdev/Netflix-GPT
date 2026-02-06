@@ -1,70 +1,89 @@
-# Getting Started with Create React App
+# Netflix-GPT
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A Netflix-style movie discovery app with AI-powered search. Browse trending titles, watch trailers, and get GPT-curated recommendations using natural language.
 
-## Available Scripts
+## Highlights
+- AI search with natural-language prompts and curated movie suggestions
+- TMDB-powered browsing: now playing, popular, top rated, upcoming
+- Trailer playback and rich movie cards
+- Firebase authentication flow with profile UI
+- Language support for GPT search copy
+- Resilient GPT flow with OpenAI and optional local Ollama fallback
 
-In the project directory, you can run:
+## Tech Stack
+- Frontend: React 19, Redux Toolkit, React Router, Tailwind CSS
+- Backend (optional): Express proxy for OpenAI
+- Auth: Firebase Authentication
+- Data: The Movie Database (TMDB)
+- AI: OpenAI Responses API or local Ollama
 
-### `npm start`
+## Architecture
+- `src/components`: UI and feature views
+- `src/hooks`: TMDB data fetch hooks
+- `src/utils`: Redux slices, config, API helpers
+- `server/`: Optional Express proxy for OpenAI
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Getting Started
+### 1) Install
+```bash
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 2) Environment Variables
+Create a `.env` file in the project root:
+```bash
+REACT_APP_TMDB_API_KEY=your_tmdb_api_key
+REACT_APP_TMDB_TOKEN=your_tmdb_read_access_token
+# Optional for the Express proxy
+OPENAI_API_KEY=your_openai_key
+PORT=5000
+```
 
-### `npm test`
+Notes:
+- TMDB requires both the API key and the Read Access Token.
+- The GPT UI prompts for an OpenAI key and stores it in browser session storage.
+- If no OpenAI key is provided, the app tries a local Ollama instance at `http://localhost:11434`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3) Run
+```bash
+npm start
+```
 
-### `npm run build`
+Optional: run the proxy server in another terminal:
+```bash
+npm run server
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Usage
+- Sign up or sign in.
+- Use the “GPT Search” button to switch between browse and AI search.
+- Enter a natural-language query to receive 5 curated movie titles.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Scripts
+- `npm start` runs the React app
+- `npm run server` runs the Express proxy
+- `npm test` runs tests
+- `npm run build` builds production assets
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Project Structure
+```
+src/
+  components/          # UI and feature components
+  hooks/               # TMDB data fetch hooks
+  utils/               # Redux slices, constants, helpers
+server/
+  index.js             # OpenAI proxy
+```
 
-### `npm run eject`
+## Security Notes
+- Do not commit API keys.
+- The OpenAI key is requested via prompt and stored only in session storage.
+- Use the Express proxy if you want to avoid exposing keys in the client.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Roadmap
+- Persist GPT recommendations with user profiles
+- Add real filtering for genre/year/rating
+- Improve error handling and observability
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+No license specified.
