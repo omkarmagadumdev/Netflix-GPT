@@ -85,7 +85,7 @@ const Signin = () => {
         <div className="text-center">
           <h2 className="text-3xl font-semibold mb-3 text-white">
             Enter your info to{" "}
-            <span>{!isSignInForm ? "Signin" : "Signup"}</span>
+            <span>{!isSignInForm ? "Sign in" : "Sign up"}</span>
           </h2>
           <p className="text-gray-400 text-lg mb-8">
             Or get started with a new account.
@@ -100,6 +100,8 @@ const Signin = () => {
                 ref={name}
                 type="text"
                 placeholder="Name"
+                name="name"
+                autoComplete="name"
                 className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-600 focus:bg-gray-700 transition"
               />
             )}
@@ -107,21 +109,29 @@ const Signin = () => {
               ref={email}
               type="email"
               placeholder="Email or mobile number"
+              name="email"
+              autoComplete="email"
+              inputMode="email"
+              spellCheck={false}
               className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-600 focus:bg-gray-700 transition"
             />
             <input
               ref={password}
               type="password"
               placeholder="Enter your password"
+              name="password"
+              autoComplete={isSignInForm ? "new-password" : "current-password"}
               className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-red-600 focus:bg-gray-700 transition"
             />
-            <p className="text-red-600">{errorMessage}</p>
+            <p className="text-red-600" aria-live="polite">
+              {errorMessage}
+            </p>
             <button
               type="button"
               onClick={handleButtonClick}
               className="w-full px-4 py-3 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold rounded transition"
             >
-              {!isSignInForm ? "Continue" : "Sing up"}
+              {!isSignInForm ? "Continue" : "Sign up"}
             </button>
           </form>
 
@@ -145,7 +155,7 @@ const Signin = () => {
           </div>
 
           <p className="text-sm text-gray-400 mt-4">
-            {isSignInForm ? "Alreay a User?" : "New to Netflix?"}
+            {isSignInForm ? "Already a user?" : "New to Netflix?"}
 
             <button
               onClick={toggleSigninForm}

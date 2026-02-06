@@ -1,69 +1,78 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { lang } from "utils/languageConstants";
 import { requestGptCompletion } from "utils/openai";
 
 const GptSearchBar = () => {
   const langKey = useSelector((store) => store.config.lang);
-  const searchText = useRef(null);
+  const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [resultText, setResultText] = useState("");
-  const handleGptSearchClick = async () => {
-    if (isLoading) {
-      return;
-    }
 
-    try {
-      setErrorMessage("");
-      setResultText("");
-      if (!sessionStorage.getItem("OPENAI_API_KEY")) {
-        const userKey = window.prompt(
-          "Enter your OpenAI API key to use OpenAI (stored only in this browser session). Leave blank to use a free local model via Ollama."
-        );
-        if (userKey) {
-          sessionStorage.setItem("OPENAI_API_KEY", userKey.trim());
-        }
+  const handleSubmit = useCallback(
+    async (event) => {
+      event?.preventDefault();
+      if (isLoading) {
+        return;
       }
 
-      const query = searchText.current?.value?.trim();
+      const trimmedQuery = query.trim();
 
-      if (!query) {
+      if (!trimmedQuery) {
         setErrorMessage("Please enter a search query.");
         return;
       }
 
-      setIsLoading(true);
+      try {
+        setErrorMessage("");
+        setResultText("");
+        if (!sessionStorage.getItem("OPENAI_API_KEY")) {
+          const userKey = window.prompt(
+            "Enter your OpenAI API key to use OpenAI (stored only in this browser session). Leave blank to use a free local model via Ollama."
+          );
+          if (userKey) {
+            sessionStorage.setItem("OPENAI_API_KEY", userKey.trim());
+          }
+        }
 
-      const result = await requestGptCompletion({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "developer",
-            content:
-              "You are a movie recommendation assistant. Based on the user's query, return 5 movie recommendations as a comma-separated list of titles only. No extra text.",
-          },
-          { role: "user", content: query },
-        ],
-      });
+        setIsLoading(true);
 
-      const output =
-        result?.output_text ||
-        result?.output?.[0]?.content?.[0]?.text ||
-        "No response";
-      console.log("GPT raw response:", result);
-      console.log("GPT output:", output);
-      setResultText(output);
-    } catch (error) {
-      console.error(error);
-      setErrorMessage(
-        error?.message ||
-          "Request failed. If you see 'Failed to fetch', the browser may be blocking the request."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        const result = await requestGptCompletion({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "developer",
+              content:
+                "You are a movie recommendation assistant. Based on the user's query, return 5 movie recommendations as a comma-separated list of titles only. No extra text.",
+            },
+            { role: "user", content: trimmedQuery },
+          ],
+        });
+
+        const output =
+          result?.output_text ||
+          result?.output?.[0]?.content?.[0]?.text ||
+          "";
+
+        if (!output) {
+          setErrorMessage("No response. Please try a different prompt.");
+          return;
+        }
+
+        setResultText(output);
+      } catch (error) {
+        console.error(error);
+        setErrorMessage(
+          error?.message ||
+            "Request failed. If you see 'Failed to fetch', the browser may be blocking the request."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isLoading, query]
+  );
 
   return (
     <>
@@ -83,19 +92,21 @@ const GptSearchBar = () => {
         </p>
 
         {/* Search Bar */}
-        <div className="w-full max-w-2xl">
+        <form className="w-full max-w-2xl" onSubmit={handleSubmit}>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
-              ref={searchText}
               type="text"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
               placeholder={lang[langKey].GptSearchLang}
+              aria-label={lang[langKey].GptSearchLang}
               className="w-full px-4 py-3 md:py-4 rounded-xl bg-gray-900/70 text-white placeholder-gray-500 border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-500/80 focus:border-red-500/80 text-sm md:text-base shadow-lg shadow-black/30"
             />
             <button
-              onClick={handleGptSearchClick}
-              disabled={isLoading}
+              type="submit"
+              disabled={isLoading || !query.trim()}
               className={`px-6 md:px-8 py-3 md:py-4 text-white font-semibold rounded-xl transition-all duration-200 text-sm md:text-base whitespace-nowrap shadow-lg shadow-black/30 ${
-                isLoading
+                isLoading || !query.trim()
                   ? "bg-red-800 cursor-not-allowed"
                   : "bg-gradient-to-b from-red-500 to-red-700 hover:from-red-400 hover:to-red-600"
               }`}
@@ -111,7 +122,7 @@ const GptSearchBar = () => {
               {resultText}
             </div>
           ) : null}
-        </div>
+        </form>
       </div>
 
       {/* Filters Section */}

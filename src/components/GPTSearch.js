@@ -25,6 +25,14 @@ const GPTSearch = () => {
       {/* Language Dropdown - Between GPT Search and Profile */}
       <div
         onClick={handleDropdownClick}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            handleDropdownClick();
+          }
+        }}
+        role="button"
+        tabIndex={0}
         className="absolute top-5 right-[360px] z-50 flex items-center gap-2.5 bg-black/60 backdrop-blur-md border border-white/20 rounded-lg px-4 py-2.5 hover:bg-black/80 hover:border-white/40 transition-all duration-300 cursor-pointer shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 group"
       >
         <svg

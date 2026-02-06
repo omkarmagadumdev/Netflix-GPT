@@ -35,6 +35,10 @@ const Login = () => {
           <input
             type="email"
             placeholder="Email address"
+            name="email"
+            autoComplete="email"
+            inputMode="email"
+            spellCheck={false}
             className="flex-1 px-5 py-5 bg-black bg-opacity-60 border border-gray-500 rounded text-white placeholder-gray-400 focus:outline-none focus:border-white"
           />
           <Link
