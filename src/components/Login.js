@@ -1,7 +1,9 @@
 import Header from "./Header";
 import { bg_img } from "utils/constants";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 const Login = () => {
+  const [emailValue, setEmailValue] = useState("");
   return (
     <div className="relative w-full min-h-screen">
       <div className="absolute inset-0 pointer-events-none">
@@ -39,10 +41,12 @@ const Login = () => {
             autoComplete="email"
             inputMode="email"
             spellCheck={false}
+            value={emailValue}
+            onChange={(e) => setEmailValue(e.target.value)}
             className="flex-1 px-5 py-5 bg-black bg-opacity-60 border border-gray-500 rounded text-white placeholder-gray-400 focus:outline-none focus:border-white"
           />
           <Link
-            to="/signup"
+            to={`/signin?mode=signup&email=${encodeURIComponent(emailValue)}`}
             className="bg-red-600 text-white px-10 py-5 rounded text-xl font-semibold hover:bg-red-700 flex items-center gap-2"
           >
             Get Started <span>›</span>

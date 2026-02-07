@@ -7,7 +7,6 @@ import {
 import Browse from "./Browse";
 import Login from "./Login";
 import Signin from "./Signin";
-import Signup from "./Signup";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "utils/firebase";
@@ -70,7 +69,7 @@ const Body = () => {
       path: "/signup",
       element: (
         <RedirectIfAuth>
-          <Signup />
+          <Navigate to="/signin?mode=signup" replace />
         </RedirectIfAuth>
       ),
     },

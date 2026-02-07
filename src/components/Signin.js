@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { logo_url } from "utils/constants";
 import { checkValidData } from "utils/validate";
 import {
@@ -7,12 +7,15 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "utils/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Signin = () => {
   const [isSignInForm, setIsSignInForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get("mode");
+  const emailParam = searchParams.get("email") || "";
 
   const name = useRef(null);
   const email = useRef(null);
@@ -70,8 +73,22 @@ const Signin = () => {
     }
   };
 
+  useEffect(() => {
+    setIsSignInForm(mode === "signup");
+  }, [mode]);
+
+  useEffect(() => {
+    if (emailParam && email.current) {
+      email.current.value = emailParam;
+    }
+  }, [emailParam]);
+
   const toggleSigninForm = () => {
-    setIsSignInForm(!isSignInForm);
+    const nextIsSignup = !isSignInForm;
+    setIsSignInForm(nextIsSignup);
+    navigate(nextIsSignup ? "/signin?mode=signup" : "/signin", {
+      replace: true,
+    });
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-red-950 to-black flex flex-col items-center justify-start pt-16 px-4">
