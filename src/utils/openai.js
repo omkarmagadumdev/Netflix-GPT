@@ -3,6 +3,12 @@ const getClientApiKey = () =>
   localStorage.getItem("OPENAI_API_KEY") ||
   "";
 
+const buildError = (message, status) => {
+  const error = new Error(message || "Request failed");
+  error.status = status;
+  return error;
+};
+
 const buildOllamaBody = (messages, model) => ({
   model: model || "llama3.2",
   messages: (messages || []).map((message) => ({
@@ -28,51 +34,67 @@ const requestLocalOllama = async (messages, model) => {
   return { output_text: data?.message?.content || "" };
 };
 
-export const requestGptCompletion = async ({ messages, model }) => {
-  const apiKey = getClientApiKey();
+const requestProxyCompletion = async (messages, model, apiKey) => {
+  const headers = {
+    "Content-Type": "application/json",
+  };
 
-  if (!apiKey) {
-    try {
-      return await requestLocalOllama(messages, model);
-    } catch (error) {
-      throw new Error(
-        "No OpenAI API key found and local Ollama is not running. Start Ollama (http://localhost:11434) or add credits to your OpenAI account."
-      );
-    }
+  if (apiKey) {
+    headers["x-openai-key"] = apiKey;
   }
 
-  const response = await fetch("https://api.openai.com/v1/responses", {
+  const response = await fetch("/api/gpt", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
+    headers,
     body: JSON.stringify({
       model: model || "gpt-4o-mini",
-      input: messages,
+      messages,
     }),
   });
 
   if (!response.ok) {
-    if (response.status === 429) {
-      try {
-        return await requestLocalOllama(messages, model);
-      } catch (error) {
-        throw new Error(
-          "Rate limit exceeded on OpenAI and local Ollama is not running. Start Ollama (http://localhost:11434) or add credits to your OpenAI account."
-        );
-      }
-    }
-    let errorMessage = "Request failed";
+    let errorMessage = "Proxy request failed";
     try {
       const errorData = await response.json();
-      errorMessage =
-        errorData?.error?.message || errorData?.error || errorMessage;
+      errorMessage = errorData?.error || errorMessage;
     } catch (error) {
       // Ignore JSON parse errors
     }
-    throw new Error(errorMessage);
+    throw buildError(errorMessage, response.status);
   }
 
-  return response.json();
+  const data = await response.json();
+  return { output_text: data?.content || "" };
+};
+
+export const requestGptCompletion = async ({ messages, model }) => {
+  const apiKey = getClientApiKey();
+
+  if (apiKey) {
+    try {
+      return await requestProxyCompletion(messages, model, apiKey);
+    } catch (error) {
+      try {
+        return await requestLocalOllama(messages, model);
+      } catch (localError) {
+        throw error;
+      }
+    }
+  }
+
+  try {
+    return await requestProxyCompletion(messages, model, "");
+  } catch (error) {
+    try {
+      return await requestLocalOllama(messages, model);
+    } catch (localError) {
+      const proxyHint =
+        error?.status === 401
+          ? "Add your OpenAI API key"
+          : "Start the proxy server (npm run server)";
+      throw new Error(
+        `No OpenAI API key found and local Ollama is not running. ${proxyHint} or start Ollama (http://localhost:11434).`
+      );
+    }
+  }
 };

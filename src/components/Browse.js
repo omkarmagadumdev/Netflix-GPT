@@ -26,6 +26,8 @@ const Browse = () => {
 
   const handleGptSearchClick = () => {
     dispatch(toggleGptSearchView());
+    
+    
   };
 
   const handleSignOut = () => {

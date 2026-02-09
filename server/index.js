@@ -8,17 +8,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 app.post("/api/gpt", async (req, res) => {
   try {
     const { messages, model } = req.body || {};
+    const headerKey = req.get("x-openai-key") || "";
+    const authHeader = req.get("authorization") || "";
+    const bearerKey = authHeader.startsWith("Bearer ")
+      ? authHeader.slice("Bearer ".length)
+      : "";
+    const apiKey = headerKey || bearerKey || process.env.OPENAI_API_KEY || "";
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: "Missing messages" });
     }
+
+    if (!apiKey) {
+      return res.status(401).json({ error: "Missing OpenAI API key" });
+    }
+
+    const client = new OpenAI({ apiKey });
 
     const completion = await client.chat.completions.create({
       model: model || "gpt-4o-mini",

@@ -9,6 +9,25 @@ const GptSearchBar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [resultText, setResultText] = useState("");
+  const [apiKey, setApiKey] = useState(
+    () => sessionStorage.getItem("OPENAI_API_KEY") || ""
+  );
+
+  const handleApiKeyChange = (event) => {
+    const nextValue = event.target.value;
+    setApiKey(nextValue);
+    const trimmedValue = nextValue.trim();
+    if (trimmedValue) {
+      sessionStorage.setItem("OPENAI_API_KEY", trimmedValue);
+      return;
+    }
+    sessionStorage.removeItem("OPENAI_API_KEY");
+  };
+
+  const handleClearKey = () => {
+    setApiKey("");
+    sessionStorage.removeItem("OPENAI_API_KEY");
+  };
 
   const handleSubmit = useCallback(
     async (event) => {
@@ -27,15 +46,6 @@ const GptSearchBar = () => {
       try {
         setErrorMessage("");
         setResultText("");
-        if (!sessionStorage.getItem("OPENAI_API_KEY")) {
-          const userKey = window.prompt(
-            "Enter your OpenAI API key to use OpenAI (stored only in this browser session). Leave blank to use a free local model via Ollama."
-          );
-          if (userKey) {
-            sessionStorage.setItem("OPENAI_API_KEY", userKey.trim());
-          }
-        }
-
         setIsLoading(true);
 
         const result = await requestGptCompletion({
@@ -93,6 +103,33 @@ const GptSearchBar = () => {
 
         {/* Search Bar */}
         <form className="w-full max-w-2xl" onSubmit={handleSubmit}>
+          <div className="mb-3 flex flex-col sm:flex-row gap-3">
+            <input
+              type="password"
+              value={apiKey}
+              onChange={handleApiKeyChange}
+              placeholder="OpenAI API key (optional)"
+              aria-label="OpenAI API key"
+              autoComplete="off"
+              className="w-full px-4 py-3 rounded-xl bg-gray-900/70 text-white placeholder-gray-500 border border-white/10 focus:outline-none focus:ring-2 focus:ring-red-500/80 focus:border-red-500/80 text-sm shadow-lg shadow-black/30"
+            />
+            <button
+              type="button"
+              onClick={handleClearKey}
+              disabled={!apiKey}
+              className={`px-4 py-3 text-white font-semibold rounded-xl transition-all duration-200 text-sm whitespace-nowrap shadow-lg shadow-black/30 ${
+                apiKey
+                  ? "bg-gray-700 hover:bg-gray-600"
+                  : "bg-gray-800 cursor-not-allowed"
+              }`}
+            >
+              Clear Key
+            </button>
+          </div>
+          <p className="mb-4 text-xs text-gray-500">
+            Stored only in this browser session. Leave blank to use the proxy
+            server or local Ollama.
+          </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
