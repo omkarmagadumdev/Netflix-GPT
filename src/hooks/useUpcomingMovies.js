@@ -1,24 +1,23 @@
-import  {  useEffect } from 'react'
-import { useDispatch } from 'react-redux';
-import { API_options, TMDB_API_KEY } from 'utils/constants';
-import {  addTopRatedMovies, addUpcomingMovies } from 'utils/movieSlice';
-
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { API_options, TMDB_API_KEY } from "utils/constants";
+import { addUpcomingMovies } from "utils/movieSlice";
 
 const useUpcomingMovies = () => {
-    const dispatch = useDispatch()
-    const getUpcoming =async ()=>{
-        const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${TMDB_API_KEY}`;
-        const data = await fetch(url, API_options);
-        const json = await data.json();
-        dispatch(addUpcomingMovies(json.results))
-  
-    }
-    
-    useEffect(()=>{
-        getUpcoming();
-    }, [])
-    
-    return null;
-} 
+  const dispatch = useDispatch();
 
-export default useUpcomingMovies
+  useEffect(() => {
+    const getUpcoming = async () => {
+      const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${TMDB_API_KEY}`;
+      const data = await fetch(url, API_options);
+      const json = await data.json();
+      dispatch(addUpcomingMovies(json.results));
+    };
+
+    getUpcoming();
+  }, [dispatch]);
+
+  return null;
+};
+
+export default useUpcomingMovies;
