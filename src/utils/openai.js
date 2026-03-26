@@ -3,6 +3,15 @@ const getClientApiKey = () =>
   localStorage.getItem("OPENAI_API_KEY") ||
   "";
 
+const isLocalEnvironment = () => {
+  const host = window?.location?.hostname || "";
+  return (
+    process.env.NODE_ENV !== "production" ||
+    host === "localhost" ||
+    host === "127.0.0.1"
+  );
+};
+
 const buildError = (message, status) => {
   const error = new Error(message || "Request failed");
   error.status = status;
@@ -69,32 +78,45 @@ const requestProxyCompletion = async (messages, model, apiKey) => {
 
 export const requestGptCompletion = async ({ messages, model }) => {
   const apiKey = getClientApiKey();
+  const canUseLocalOllama = isLocalEnvironment();
 
   if (apiKey) {
     try {
       return await requestProxyCompletion(messages, model, apiKey);
     } catch (error) {
-      try {
-        return await requestLocalOllama(messages, model);
-      } catch (localError) {
-        throw error;
+      if (canUseLocalOllama) {
+        try {
+          return await requestLocalOllama(messages, model);
+        } catch (localError) {
+          throw error;
+        }
       }
+
+      throw error;
     }
   }
 
   try {
     return await requestProxyCompletion(messages, model, "");
   } catch (error) {
-    try {
-      return await requestLocalOllama(messages, model);
-    } catch (localError) {
-      const proxyHint =
-        error?.status === 401
-          ? "Add your OpenAI API key"
-          : "Start the proxy server (npm run server)";
-      throw new Error(
-        `No OpenAI API key found and local Ollama is not running. ${proxyHint} or start Ollama (http://localhost:11434).`
-      );
+    if (canUseLocalOllama) {
+      try {
+        return await requestLocalOllama(messages, model);
+      } catch (localError) {
+        const proxyHint =
+          error?.status === 401
+            ? "Add your OpenAI API key"
+            : "Start the proxy server (npm run server)";
+        throw new Error(
+          `No OpenAI API key found and local Ollama is not running. ${proxyHint} or start Ollama (http://localhost:11434).`
+        );
+      }
     }
+
+    const proxyHint =
+      error?.status === 401
+        ? "Add your OpenAI API key"
+        : "Start the proxy server (npm run server)";
+    throw new Error(`GPT request failed. ${proxyHint}.`);
   }
 };
