@@ -1,16 +1,13 @@
 export const logo_url =
-  "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg";
+  "https://upload.wikimedia.org/wikipedia/commons/7/75/YouTube_social_white_squircle_%282017%29.svg";
 
 export const bg_img =
-  "https://assets.nflxext.com/ffe/siteui/vlv3/fc164b4b-f085-44ee-bb7f-ec7df8539eff/d23a1608-7d90-4da1-93d6-bae2fe60a69b/IN-en-20230814-popsignuptwoweeks-perspective_alpha_website_large.jpg";
+  "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80";
 
 // Stable placeholder avatar (pravatar hosts static PNGs)
-export const profile_img_red =
-  "https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg";
-export const profile_img_green =
-  "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png?20201013161117";
-export const profile_img_yellow =
-  "https://i.pinimg.com/736x/1b/a2/e6/1ba2e6d1d4874546c70c91f1024e17fb.jpg";
+export const profile_img_red = "https://i.pravatar.cc/300?img=12";
+export const profile_img_green = "https://i.pravatar.cc/300?img=22";
+export const profile_img_yellow = "https://i.pravatar.cc/300?img=32";
 
 // Get your API key from https://www.themoviedb.org/settings/api
 export const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;

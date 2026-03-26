@@ -95,7 +95,7 @@ const Signin = () => {
       <div className="w-full max-w-md">
         <div className="mb-24">
           <div className="absolute inset-x-0 top-0 z-30 w-full px-8 py-2 bg-gradient-to-b from-black flex justify-between items-center pointer-events-auto">
-            <img className="w-44 p-5 " src={logo_url} alt="Netflix Logo" />
+            <img className="w-44 p-5 " src={logo_url} alt="App Logo" />
           </div>
         </div>
 
@@ -172,7 +172,7 @@ const Signin = () => {
           </div>
 
           <p className="text-sm text-gray-400 mt-4">
-            {isSignInForm ? "Already a user?" : "New to Netflix?"}
+            {isSignInForm ? "Already a user?" : "New to MovieHub?"}
 
             <button
               onClick={toggleSigninForm}

@@ -6,7 +6,7 @@ const Signup = () => {
   return (
     <div className="min-h-screen bg-white text-black flex flex-col">
       <header className="flex items-center justify-between px-6 py-4">
-        <img src={logo_url} alt="Netflix logo" className="h-10 sm:h-12" />
+        <img src={logo_url} alt="App logo" className="h-10 sm:h-12" />
         <Link
           to="/signin"
           className="text-sm font-semibold text-gray-900 hover:underline"
@@ -19,7 +19,7 @@ const Signup = () => {
         <div className="w-full max-w-xl text-left mt-6">
           <h1 className="text-3xl sm:text-4xl font-bold leading-tight mb-4">
             <span className="block">Welcome back! Joining</span>
-            <span className="block">Netflix is easy.</span>
+            <span className="block">MovieHub is easy.</span>
           </h1>
 
           <p className="text-gray-700 text-base sm:text-lg mb-8">
@@ -65,7 +65,7 @@ const Signup = () => {
             </label>
 
             <p className="text-sm text-gray-800">
-              New to Netflix?
+              New to MovieHub?
               <Link to="/" className="font-semibold hover:underline ml-1">
                 Sign up now.
               </Link>
