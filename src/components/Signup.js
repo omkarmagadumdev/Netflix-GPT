@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logo_url } from "utils/constants";
 
 const Signup = () => {
   return (
     <div className="min-h-screen bg-white text-black flex flex-col">
       <header className="flex items-center justify-between px-6 py-4">
-        <img src={logo_url} alt="App logo" className="h-10 sm:h-12" />
+        <span className="text-3xl font-black uppercase tracking-[0.3em] text-red-600">
+          Netflix
+        </span>
         <Link
           to="/signin"
           className="text-sm font-semibold text-gray-900 hover:underline"

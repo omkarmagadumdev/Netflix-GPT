@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { logo_url } from "utils/constants";
 import { checkValidData } from "utils/validate";
 import {
   createUserWithEmailAndPassword,
@@ -95,7 +94,9 @@ const Signin = () => {
       <div className="w-full max-w-md">
         <div className="mb-24">
           <div className="absolute inset-x-0 top-0 z-30 w-full px-8 py-2 bg-gradient-to-b from-black flex justify-between items-center pointer-events-auto">
-            <img className="w-44 p-5 " src={logo_url} alt="App Logo" />
+            <span className="px-5 py-3 text-4xl font-black uppercase tracking-[0.35em] text-red-600 drop-shadow-[0_0_14px_rgba(229,9,20,0.35)]">
+              Netflix
+            </span>
           </div>
         </div>
 
